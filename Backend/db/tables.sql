@@ -1,25 +1,20 @@
-CREATE TABLE Gender (
-    gender_id INT AUTO_INCREMENT PRIMARY KEY,
-    gender_name ENUM('Male', 'Female', 'Other') NOT NULL
-);
-CREATE TABLE Users (
+CREATE TABLE IF NOT EXISTS Users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     first_name VARCHAR(50),
     last_name VARCHAR(50),
     email VARCHAR(100) UNIQUE NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    last_login TIMESTAMP,
-    gender_id INT,
-    FOREIGN KEY (gender_id) REFERENCES Gender(gender_id)
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    last_login DATETIME,
+    gender ENUM('Male', 'Female', 'Other') NOT NULL
 );
 
-CREATE TABLE Income_Source (
+CREATE TABLE IF NOT EXISTS Income_Source (
     source_id INT AUTO_INCREMENT PRIMARY KEY,
     source_name VARCHAR(100) UNIQUE NOT NULL
 );
 
-CREATE TABLE Income (
+CREATE TABLE IF NOT EXISTS Income (
     income_id INT AUTO_INCREMENT PRIMARY KEY,
     amount DECIMAL(10, 2) NOT NULL,
     date DATE NOT NULL,
@@ -28,13 +23,11 @@ CREATE TABLE Income (
     FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
     FOREIGN KEY (source_id) REFERENCES Income_Source(source_id) ON DELETE SET NULL
 );
-
-CREATE TABLE Expense_Category (
+CREATE TABLE IF NOT EXISTS Expense_Category (
     category_id INT AUTO_INCREMENT PRIMARY KEY,
     category_name VARCHAR(50) UNIQUE NOT NULL
 );
-
-CREATE TABLE Expenses (
+CREATE TABLE IF NOT EXISTS Expenses (
     expense_id INT AUTO_INCREMENT PRIMARY KEY,
     amount DECIMAL(10, 2) NOT NULL,
     date DATE NOT NULL,
@@ -44,12 +37,12 @@ CREATE TABLE Expenses (
     FOREIGN KEY (category_id) REFERENCES Expense_Category(category_id) ON DELETE SET NULL
 );
 
-CREATE TABLE Frequency (
+CREATE TABLE IF NOT EXISTS Frequency (
     frequency_id INT AUTO_INCREMENT PRIMARY KEY,
     frequency_name VARCHAR(50) UNIQUE NOT NULL
 );
 
-CREATE TABLE Recurring_Expenses (
+CREATE TABLE IF NOT EXISTS Recurring_Expenses (
     recurring_id INT AUTO_INCREMENT PRIMARY KEY,
     amount DECIMAL(10, 2) NOT NULL,
     start_date DATE NOT NULL,
@@ -62,7 +55,7 @@ CREATE TABLE Recurring_Expenses (
     FOREIGN KEY (category_id) REFERENCES Expense_Category(category_id) ON DELETE SET NULL
 );
 
-CREATE TABLE Budget (
+CREATE TABLE IF NOT EXISTS Budget (
     budget_id INT AUTO_INCREMENT PRIMARY KEY,
     monthly_budget DECIMAL(10, 2) NOT NULL,
     last_defined_date DATE NOT NULL,
@@ -70,7 +63,7 @@ CREATE TABLE Budget (
     FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE
 );
 
-CREATE TABLE Financial_Goal (
+CREATE TABLE IF NOT EXISTS Financial_Goal (
     goal_id INT AUTO_INCREMENT PRIMARY KEY,
     goal_amount DECIMAL(10, 2) NOT NULL,
     goal_deadline DATE NOT NULL,
