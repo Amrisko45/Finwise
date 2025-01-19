@@ -16,6 +16,7 @@ import {
   BellIcon,
   CalendarIcon,
   ChartPieIcon,
+  Cog6ToothIcon,
   DocumentDuplicateIcon,
   FolderIcon,
   HomeIcon,
@@ -23,14 +24,20 @@ import {
   XMarkIcon,
 } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
+import Link from 'next/link'
 
 const navigation = [
-  { name: 'Dashboard', href: '#', icon: HomeIcon, current: true },
-  { name: 'Team', href: '#', icon: UsersIcon, current: false },
-  { name: 'Projects', href: '#', icon: FolderIcon, current: false },
-  { name: 'Calendar', href: '#', icon: CalendarIcon, current: false },
-  { name: 'Documents', href: '#', icon: DocumentDuplicateIcon, current: false },
-  { name: 'Reports', href: '#', icon: ChartPieIcon, current: false },
+  { name: 'Home', href: '#', icon: HomeIcon, current: true },
+  { name: 'Expenses', href: '/expenses', icon: UsersIcon, current: false },
+  { name: 'Budget', href: '/budget', icon: FolderIcon, current: false },
+  { name: 'Income', href: '/income', icon: CalendarIcon, current: false },
+  { name: 'Financial Goals', href: '/financial-goals', icon: DocumentDuplicateIcon, current: false },
+  { name: 'About', href: '/about', icon: ChartPieIcon, current: false },
+]
+const teams = [
+  { id: 1, name: 'Heroicons', href: '#', initial: 'H', current: false },
+  { id: 2, name: 'Tailwind Labs', href: '#', initial: 'T', current: false },
+  { id: 3, name: 'Workcation', href: '#', initial: 'W', current: false },
 ]
 const userNavigation = [
   { name: 'Your profile', href: '#' },
@@ -54,7 +61,7 @@ export default function HomePage() {
         <body class="h-full">
         ```
       */}
-      <div className=''>
+      <div>
         <Dialog open={sidebarOpen} onClose={setSidebarOpen} className="relative z-50 lg:hidden">
           <DialogBackdrop
             transition
@@ -74,8 +81,8 @@ export default function HomePage() {
                   </button>
                 </div>
               </TransitionChild>
-
-              <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-2 ring-1 ring-white/10">
+              {/* Sidebar component, swap this element with another sidebar if you like */}
+              <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-4 ring-1 ring-white/10">
                 <div className="flex h-16 shrink-0 items-center">
                   <img
                     alt="Your Company"
@@ -84,7 +91,82 @@ export default function HomePage() {
                   />
                 </div>
                 <nav className="flex flex-1 flex-col">
-                  <ul role="list" className="-mx-2 flex-1 space-y-1">
+                  <ul role="list" className="flex flex-1 flex-col gap-y-7">
+                    <li>
+                      <ul role="list" className="-mx-2 space-y-1">
+                        {navigation.map((item) => (
+                          <li key={item.name}>
+                            <Link href={item.href}>
+                            <a
+                              className={classNames(
+                                item.current
+                                  ? 'bg-gray-800 text-white'
+                                  : 'text-gray-400 hover:bg-gray-800 hover:text-white',
+                                'group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold',
+                              )}
+                            >
+                              <item.icon aria-hidden="true" className="size-6 shrink-0" />
+                              {item.name}
+                            </a>
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </li>
+                    <li>
+                      <div className="text-xs/6 font-semibold text-gray-400">Your teams</div>
+                      <ul role="list" className="-mx-2 mt-2 space-y-1">
+                        {teams.map((team) => (
+                          <li key={team.name}>
+                            <a
+                              href={team.href}
+                              className={classNames(
+                                team.current
+                                  ? 'bg-gray-800 text-white'
+                                  : 'text-gray-400 hover:bg-gray-800 hover:text-white',
+                                'group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold',
+                              )}
+                            >
+                              <span className="flex size-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-gray-800 text-[0.625rem] font-medium text-gray-400 group-hover:text-white">
+                                {team.initial}
+                              </span>
+                              <span className="truncate">{team.name}</span>
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </li>
+                    <li className="mt-auto">
+                      <a
+                        href="#"
+                        className="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold text-gray-400 hover:bg-gray-800 hover:text-white"
+                      >
+                        <Cog6ToothIcon aria-hidden="true" className="size-6 shrink-0" />
+                        Settings
+                      </a>
+                    </li>
+                  </ul>
+                </nav>
+              </div>
+            </DialogPanel>
+          </div>
+        </Dialog>
+
+        {/* Static sidebar for desktop */}
+        <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
+          {/* Sidebar component, swap this element with another sidebar if you like */}
+          <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-4">
+            <div className="flex h-16 shrink-0 items-center">
+              <img
+                alt="Your Company"
+                src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=500"
+                className="h-8 w-auto"
+              />
+            </div>
+            <nav className="flex flex-1 flex-col">
+              <ul role="list" className="flex flex-1 flex-col gap-y-7">
+                <li>
+                  <ul role="list" className="-mx-2 space-y-1">
                     {navigation.map((item) => (
                       <li key={item.name}>
                         <a
@@ -102,42 +184,45 @@ export default function HomePage() {
                       </li>
                     ))}
                   </ul>
-                </nav>
-              </div>
-            </DialogPanel>
-          </div>
-        </Dialog>
-
-        {/* Static sidebar for desktop */}
-        <div className="hidden lg:fixed lg:inset-y-0 lg:left-0 lg:z-50 lg:block lg:w-20 lg:overflow-y-auto lg:bg-gray-900 lg:pb-4">
-          <div className="flex h-16 shrink-0 items-center justify-center">
-            <img
-              alt="Your Company"
-              src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=500"
-              className="h-8 w-auto"
-            />
-          </div>
-          <nav className="mt-8">
-            <ul role="list" className="flex flex-col items-center space-y-1">
-              {navigation.map((item) => (
-                <li key={item.name}>
+                </li>
+                <li>
+                  <div className="text-xs/6 font-semibold text-gray-400">Your teams</div>
+                  <ul role="list" className="-mx-2 mt-2 space-y-1">
+                    {teams.map((team) => (
+                      <li key={team.name}>
+                        <a
+                          href={team.href}
+                          className={classNames(
+                            team.current
+                              ? 'bg-gray-800 text-white'
+                              : 'text-gray-400 hover:bg-gray-800 hover:text-white',
+                            'group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold',
+                          )}
+                        >
+                          <span className="flex size-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-gray-800 text-[0.625rem] font-medium text-gray-400 group-hover:text-white">
+                            {team.initial}
+                          </span>
+                          <span className="truncate">{team.name}</span>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </li>
+                <li className="mt-auto">
                   <a
-                    href={item.href}
-                    className={classNames(
-                      item.current ? 'bg-gray-800 text-white' : 'text-gray-400 hover:bg-gray-800 hover:text-white',
-                      'group flex gap-x-3 rounded-md p-3 text-sm/6 font-semibold',
-                    )}
+                    href="#"
+                    className="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold text-gray-400 hover:bg-gray-800 hover:text-white"
                   >
-                    <item.icon aria-hidden="true" className="size-6 shrink-0" />
-                    <span className="sr-only">{item.name}</span>
+                    <Cog6ToothIcon aria-hidden="true" className="size-6 shrink-0" />
+                    Settings
                   </a>
                 </li>
-              ))}
-            </ul>
-          </nav>
+              </ul>
+            </nav>
+          </div>
         </div>
 
-        <div className="lg:pl-20">
+        <div className="lg:pl-72">
           <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
             <button type="button" onClick={() => setSidebarOpen(true)} className="-m-2.5 p-2.5 text-gray-700 lg:hidden">
               <span className="sr-only">Open sidebar</span>
@@ -206,14 +291,10 @@ export default function HomePage() {
             </div>
           </div>
 
-          <main className="xl:pl-96">
-            <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">{/* Main area */}</div>
+          <main className="py-10">
+            <div className="px-4 sm:px-6 lg:px-8">{/* Your content */}</div>
           </main>
         </div>
-
-        <aside className="fixed bottom-0 left-20 top-16 hidden w-96 overflow-y-auto border-r border-gray-200 px-4 py-6 sm:px-6 lg:px-8 xl:block">
-          {/* Secondary column (hidden on smaller screens) */}
-        </aside>
       </div>
     </>
   )

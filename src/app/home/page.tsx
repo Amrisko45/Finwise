@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import HomePage from '../../components/HomePage';
 import Footer from '../../components/Footer';
+import Chatbot from "../chatbot/ChatBot";
+import NavBar from "@/components/NavBar";
 
 const Home = () => {
   const router = useRouter();
@@ -27,12 +28,15 @@ const Home = () => {
   }
 
   return (
-    <div>
-      <div>
-       <HomePage />
-      </div>
-      <Footer/>
+    <div className="flex flex-col min-h-screen">
+    <div className="flex-grow">
+      <NavBar />
     </div>
+      <Chatbot/>
+      <div className="mt-24">
+        <Footer/>
+      </div>
+  </div>
   );
 };
 

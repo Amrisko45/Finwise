@@ -8,6 +8,9 @@ import { fileURLToPath } from 'url';
 import fs from 'fs';
 import 'dotenv/config';
 
+import addExpenseRouter from './routes/expenses.js';
+import addIncomeRouter from './routes/income.js';
+
 const app = express();
 const port = process.env.PORT || 5001; // Default port to 4000 or use environment variable
 const __filename = fileURLToPath(import.meta.url);
@@ -72,6 +75,8 @@ app.use(cors());
 
 // Routes
 app.use('/auth', authRoutes);
+app.use('/api', addExpenseRouter);
+app.use('/api', addIncomeRouter);
 
 // Start server and connect to the database
 app.listen(port, async () => {

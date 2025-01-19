@@ -1,18 +1,15 @@
-import mysql from 'mysql2';
+import mysql from 'mysql2/promise';
 
-const db = mysql.createConnection({
+// Create a connection pool
+const pool = mysql.createPool({
   host: 'localhost',
   user: 'root',
   password: 'CvProject@42',
   database: 'finance_trackerDB',
+  waitForConnections: true,
+  connectionLimit: 10, // Adjust based on your needs
+  queueLimit: 0,       // No limit on queued connections
 });
 
-db.connect((err) => {
-  if (err) {
-    console.error('Database connection failed:', err.stack);
-    return;
-  }
-  console.log('Connected to the database.');
-});
-
-export default db;
+// Export the pool
+export default pool;
