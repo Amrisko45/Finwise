@@ -10,6 +10,7 @@ router.use(express.urlencoded({ extended: true }));
 // Signup Route
 router.post('/signup', async (req, res) => {
   const { first_name, last_name, email, password, gender } = req.body;
+  console.log(req.body);
 
   // Validate input fields
   if (!first_name || !last_name || !email || !password || !gender) {

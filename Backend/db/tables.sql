@@ -18,11 +18,13 @@ CREATE TABLE IF NOT EXISTS Income (
     income_id INT AUTO_INCREMENT PRIMARY KEY,
     amount DECIMAL(10, 2) NOT NULL,
     date DATE NOT NULL,
+    frequency ENUM('One-Time', 'Daily', 'Weekly', 'Monthly', 'Yearly') NOT NULL DEFAULT 'One-Time',
     user_id INT,
     source_id INT,
     FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
     FOREIGN KEY (source_id) REFERENCES Income_Source(source_id) ON DELETE SET NULL
 );
+
 CREATE TABLE IF NOT EXISTS Expense_Category (
     category_id INT AUTO_INCREMENT PRIMARY KEY,
     category_name VARCHAR(50) UNIQUE NOT NULL
@@ -33,13 +35,9 @@ CREATE TABLE IF NOT EXISTS Expenses (
     date DATE NOT NULL,
     user_id INT,
     category_id INT,
+    time TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
     FOREIGN KEY (category_id) REFERENCES Expense_Category(category_id) ON DELETE SET NULL
-);
-
-CREATE TABLE IF NOT EXISTS Frequency (
-    frequency_id INT AUTO_INCREMENT PRIMARY KEY,
-    frequency_name VARCHAR(50) UNIQUE NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS Recurring_Expenses (
@@ -47,13 +45,13 @@ CREATE TABLE IF NOT EXISTS Recurring_Expenses (
     amount DECIMAL(10, 2) NOT NULL,
     start_date DATE NOT NULL,
     end_date DATE,
+    frequency ENUM('Daily', 'Weekly', 'Monthly', 'Yearly') NOT NULL DEFAULT 'Monthly',
     user_id INT,
-    frequency_id INT,
     category_id INT,
     FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
-    FOREIGN KEY (frequency_id) REFERENCES Frequency(frequency_id) ON DELETE SET NULL,
     FOREIGN KEY (category_id) REFERENCES Expense_Category(category_id) ON DELETE SET NULL
 );
+
 
 CREATE TABLE IF NOT EXISTS Budget (
     budget_id INT AUTO_INCREMENT PRIMARY KEY,
