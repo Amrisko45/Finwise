@@ -1,10 +1,6 @@
-import { useEffect,useState } from "react";
-import expenses from "./expenses";
-
-const people = [
-  { name: 'Lindsay Walton', title: 'Front-end Developer', email: 'lindsay.walton@example.com', role: 'Member' },
-  // More people...
-]
+// "use client";
+import Footer from "@/components/Footer";
+import { use, useEffect, useState } from "react";
 
 type Income = {
   income_id: number;
@@ -12,60 +8,86 @@ type Income = {
   date: string;
   frequency: string;
   source_name: string;
-}
+};
 
 type Source = {
   source_id: number;
   source_name: string;
-}
+};
 
 export default function income() {
-  const [income, setIncome] = useState<Income[]>([]);
+  const [incomes, setIncomes] = useState<Income[]>([]);
   const [amount, setAmount] = useState<string>("");
   const [source, setSource] = useState<string>("");
+  const [sources, setSources] = useState<Source[]>([]);
   const [incomeDate, setIncomeDate] = useState<string>("");
   const [frequency, setFrequency] = useState<string>("");
   const [showForm, setShowForm] = useState<boolean>(false);
   const [successMessage, setSuccessMessage] = useState("");
 
   const [alert, setAlert] = useState<{
-      type: 'success' | 'error';
-      message: string;
-      show: boolean;
-    }>({
-      type: 'success',
-      message: '',
-      show: false
+    type: "success" | "error";
+    message: string;
+    show: boolean;
+  }>({
+    type: "success",
+    message: "",
+    show: false,
   });
 
-  const showAlert = (type: 'success' | 'error', message: string) => {
+  const showAlert = (type: "success" | "error", message: string) => {
     setAlert({
       type,
       message,
-      show: true
+      show: true,
     });
 
     setTimeout(() => {
-      setAlert(prev => ({ 
-        ...prev, 
-        show: false 
+      setAlert((prev) => ({
+        ...prev,
+        show: false,
       }));
     }, 3000);
   };
+
+  useEffect(() => {
+    async function fetchIncomesAndSources() {
+      try {
+        const response = await fetch(
+          "http://localhost:5001/api/income-with-sources"
+        );
+        const data: { incomes: Income[]; sources: Source[] } =
+          await response.json();
+
+        const formattedIncomes = data.incomes.map((income) => ({
+          ...income,
+          date: income.date
+            ? new Date(income.date).toISOString().split("T")[0]
+            : new Date().toISOString().split("T")[0],
+        }));
+        setIncomes(formattedIncomes);
+        setSources(data.sources);
+        console.log(data.sources);
+      } catch (error) {
+        console.error("Error fetching data: ", error);
+      }
+    }
+    fetchIncomesAndSources();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     setSuccessMessage("Expense added successfully!");
 
-    //Delay hiding the form 
+    //Delay hiding the form
     setTimeout(() => {
       setSuccessMessage("");
       setShowForm(false);
     }, 3000);
 
     if (!amount || !source || !incomeDate || !frequency) {
-      showAlert('error', 'Please fill in all fields');
+      showAlert("error", "Please fill in all fields");
       return;
     }
 
@@ -73,26 +95,57 @@ export default function income() {
       amount: parseFloat(amount),
       source_name: source,
       date: incomeDate,
-      frequency: frequency
+      frequency: frequency,
     };
 
     try {
       const response = await fetch("http://localhost:5001/api/add-income", {
         method: "POST",
         headers: {
-          "Content-Type" : "application/json",
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(incomeData),
       });
-      
-      if(response.ok) {
-        const updatedResponse = await fetch("")
-      }
-    }
-    catch (error) {
 
+      if (response.ok) {
+        const updatedResponse = await fetch(
+          "http://localhost:5001/api/income-with-sources"
+        );
+        if (!updatedResponse.ok) {
+          const errorText = await updatedResponse.text();
+          console.error("Error response:", updatedResponse.status, errorText);
+          showAlert("error", "Failed to fetch updated income.");
+          return;
+        }
+        const updatedIncomeData = await updatedResponse.json();
+
+        const formattedIncomes = updatedIncomeData.incomes.map(
+          (income: Income) => ({
+            ...income,
+            // date: income.date,
+            // ? new Date(income.date).toISOString().split("T")[0]
+            // : new Date().toISOString().split("T")[0],
+            date: income.date || new Date().toISOString().split("T")[0],
+          })
+        );
+
+        setIncomes(formattedIncomes);
+        setAmount("");
+        setSource("");
+        setIncomeDate("");
+        setFrequency("");
+        setShowForm(false);
+        showAlert("success", "Income added successfully!");
+      } else {
+        const errorData = await response.json();
+        showAlert("error", errorData.error || "Failed to add income");
+      }
+    } catch (error) {
+      console.error("Error submitting income:", error);
+      showAlert("error", "An unexpected error occured. Please try again");
     }
-  }
+  };
+
   return (
     <div className="bg-gray-900">
       <div className="mx-auto max-w-7xl">
@@ -102,54 +155,157 @@ export default function income() {
               <div className="sm:flex-auto">
                 <h1 className="text-base font-semibold text-white">Users</h1>
                 <p className="mt-2 text-sm text-gray-300">
-                  A list of all the users in your account including their name, title, email and role.
+                  A list of all the users in your account including their
+                  income, source, date and frequency.
                 </p>
               </div>
               <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
                 <button
                   type="button"
                   className="block rounded-md bg-indigo-500 px-3 py-2 text-center text-sm font-semibold text-white hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+                  onClick={() => setShowForm(!showForm)}
                 >
-                  Add user
+                  Add Income
                 </button>
               </div>
             </div>
+            {/* INCOME FORM */}
+            {showForm && (
+              <div className="mt-4">
+                {successMessage && (
+                  <div className="mb-4 p-3 rounded-md bg-green-600 text-white">
+                    {successMessage}
+                  </div>
+                )}
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div>
+                    <label htmlFor="amount" className="text-white">
+                      Amount
+                    </label>
+                    <input
+                      id="amount"
+                      type="number"
+                      value={amount}
+                      onChange={(e) => setAmount(e.target.value)}
+                      className="mt-1 p-2 rounded-md w-full bg-gray-700 text-white border-gray-600 focus:border-indigo-500 focus:ring-indigo-500"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="source" className="text-white">
+                      Source
+                    </label>
+                    <input
+                      id="source"
+                      type="text"
+                      value={source}
+                      onChange={(e) => setSource(e.target.value)}
+                      className="mt-1 p-2 rounded-md w-full bg-gray-700 text-white border-gray-600 focus:border-indigo-500 focus:ring-indigo-500"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="incomeDate" className="text-white">
+                      Date
+                    </label>
+                    <input
+                      id="incomeDate"
+                      type="date"
+                      value={incomeDate}
+                      onChange={(e) => setIncomeDate(e.target.value)}
+                      className="mt-1 p-2 rounded-md w-full bg-gray-700 text-white border-gray-600 focus:border-indigo-500 focus:ring-indigo-500"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="frequency" className="text-white">
+                      Frequency
+                    </label>
+                    <input
+                      id="frequency"
+                      type="text"
+                      value={frequency}
+                      onChange={(e) => setFrequency(e.target.value)}
+                      className="mt-1 p-2 rounded-md w-full bg-gray-700 text-white border-gray-600 focus:border-indigo-500 focus:ring-indigo-500"
+                      required
+                    />
+                  </div>
+                  <div className="flex justify-end space-x-4">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setAmount("");
+                        setSource("");
+                        setIncomeDate("");
+                        setFrequency("");
+                        setShowForm(false);
+                      }}
+                      className="block rounded-md bg-gray-600 px-3 py-2 text-center text-sm font-semibold text-white hover:bg-gray-500"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      className="block rounded-md bg-indigo-500 px-3 py-2 text-center text-sm font-semibold text-white hover:bg-indigo-400"
+                    >
+                      Submit
+                    </button>
+                  </div>
+                </form>
+              </div>
+            )}
             <div className="mt-8 flow-root">
               <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                 <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
                   <table className="min-w-full divide-y divide-gray-700">
                     <thead>
                       <tr>
-                        <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-0">
-                          Name
+                        <th
+                          scope="col"
+                          className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-0"
+                        >
+                          Amount
                         </th>
-                        <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-white">
-                          Title
+                        <th
+                          scope="col"
+                          className="px-3 py-3.5 text-left text-sm font-semibold text-white"
+                        >
+                          Source
                         </th>
-                        <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-white">
-                          Email
+                        <th
+                          scope="col"
+                          className="px-3 py-3.5 text-left text-sm font-semibold text-white"
+                        >
+                          Date
                         </th>
-                        <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-white">
-                          Role
+                        <th
+                          scope="col"
+                          className="px-3 py-3.5 text-left text-sm font-semibold text-white"
+                        >
+                          Frequency
                         </th>
-                        <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-0">
+                        <th
+                          scope="col"
+                          className="relative py-3.5 pl-3 pr-4 sm:pr-0"
+                        >
                           <span className="sr-only">Edit</span>
                         </th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-800">
-                      {people.map((person) => (
-                        <tr key={person.email}>
+                      {incomes.map((income) => (
+                        <tr key={income.income_id}>
                           <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-white sm:pl-0">
-                            {person.name}
+                            ₹{income.amount}
                           </td>
-                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-300">{person.title}</td>
-                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-300">{person.email}</td>
-                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-300">{person.role}</td>
-                          <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                            <a href="#" className="text-indigo-400 hover:text-indigo-300">
-                              Edit<span className="sr-only">, {person.name}</span>
-                            </a>
+                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-300">
+                            {income.source_name}
+                          </td>
+                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-300">
+                            {income.date}
+                          </td>
+                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-300">
+                            {income.frequency}
                           </td>
                         </tr>
                       ))}
@@ -161,6 +317,7 @@ export default function income() {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
-  )
+  );
 }

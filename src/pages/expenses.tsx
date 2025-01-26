@@ -1,3 +1,4 @@
+import Footer from "@/components/Footer";
 import React, { useState, useEffect } from "react";
 
 type Expense = {
@@ -29,13 +30,13 @@ export default function expenses() {
   const [showForm, setShowForm] = useState<boolean>(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [alert, setAlert] = useState<{
-    type: 'success' | 'error';
+    type: "success" | "error";
     message: string;
     show: boolean;
   }>({
-    type: 'success',
-    message: '',
-    show: false
+    type: "success",
+    message: "",
+    show: false,
   });
 
   useEffect(() => {
@@ -45,31 +46,36 @@ export default function expenses() {
     }
   }, [successMessage]);
 
-  const showAlert = (type: 'success' | 'error', message: string) => {
+  const showAlert = (type: "success" | "error", message: string) => {
     setAlert({
       type,
       message,
-      show: true
+      show: true,
     });
 
     setTimeout(() => {
-      setAlert(prev => ({ ...prev, show: false }));
+      setAlert((prev) => ({ ...prev, show: false }));
     }, 3000);
   };
 
   useEffect(() => {
     async function fetchExpensesAndCategories() {
       try {
-        const response = await fetch("http://localhost:5001/api/expenses-with-categories");
-        const data: { expenses: Expense[]; categories: Category[] } = await response.json();
-        
+        const response = await fetch(
+          "http://localhost:5001/api/expenses-with-categories"
+        );
+        const data: { expenses: Expense[]; categories: Category[] } =
+          await response.json();
+
         // Format the dates and times with null checks
-        const formattedExpenses = data.expenses.map(expense => ({
+        const formattedExpenses = data.expenses.map((expense) => ({
           ...expense,
-          date: expense.date ? new Date(expense.date).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
-          time: formatTime(expense.time)
+          date: expense.date
+            ? new Date(expense.date).toISOString().split("T")[0]
+            : new Date().toISOString().split("T")[0],
+          time: formatTime(expense.time),
         }));
-        
+
         setExpenses(formattedExpenses);
         setCategories(data.categories);
       } catch (error) {
@@ -82,23 +88,23 @@ export default function expenses() {
   const formatTime = (timeString: string | null): string => {
     // Return default time if timeString is null or undefined
     if (!timeString) return "00:00:00";
-    
+
     try {
       // If the timeString already includes seconds, return it
-      if (timeString.split(':').length === 3) return timeString;
-      
+      if (timeString.split(":").length === 3) return timeString;
+
       // If it's in HH:mm format, add seconds
-      if (timeString.split(':').length === 2) return `${timeString}:00`;
-      
+      if (timeString.split(":").length === 2) return `${timeString}:00`;
+
       // If it's a full date string, extract time
-      if (timeString.includes('T')) {
+      if (timeString.includes("T")) {
         const date = new Date(timeString);
         if (isNaN(date.getTime())) {
           return "00:00:00"; // Return default time if date is invalid
         }
-        return date.toTimeString().split(' ')[0];
+        return date.toTimeString().split(" ")[0];
       }
-      
+
       // If none of the above conditions match, return default time
       return "00:00:00";
     } catch (error) {
@@ -107,13 +113,24 @@ export default function expenses() {
     }
   };
 
-  const CategorySelector = ({ categories, onCategoryChange, selectedCategory }: CategorySelectorProps) => {
+  const CategorySelector = ({
+    categories,
+    onCategoryChange,
+    selectedCategory,
+  }: CategorySelectorProps) => {
     const [customCategory, setCustomCategory] = useState<string>("");
-    const [addedCategories, setAddedCategories] = useState<Category[]>(categories);
+    const [addedCategories, setAddedCategories] =
+      useState<Category[]>(categories);
 
     const handleAddCustomCategory = () => {
-      if (customCategory && !addedCategories.some((cat) => cat.category_name === customCategory)) {
-        const newCategory = { category_id: addedCategories.length + 1, category_name: customCategory };
+      if (
+        customCategory &&
+        !addedCategories.some((cat) => cat.category_name === customCategory)
+      ) {
+        const newCategory = {
+          category_id: addedCategories.length + 1,
+          category_name: customCategory,
+        };
         setAddedCategories([...addedCategories, newCategory]);
         onCategoryChange(customCategory);
         setCustomCategory("");
@@ -122,7 +139,9 @@ export default function expenses() {
 
     return (
       <div>
-        <label htmlFor="category" className="text-white">Category</label>
+        <label htmlFor="category" className="text-white">
+          Category
+        </label>
         <select
           id="category"
           value={selectedCategory} // Use the selectedCategory prop
@@ -130,7 +149,9 @@ export default function expenses() {
           className="mt-1 p-2 rounded-md w-full bg-gray-700 text-white border-gray-600 focus:border-indigo-500 focus:ring-indigo-500"
           required
         >
-          <option value="" disabled>Select a category</option>
+          <option value="" disabled>
+            Select a category
+          </option>
           {addedCategories.map((cat) => (
             <option key={cat.category_id} value={cat.category_name}>
               {cat.category_name}
@@ -165,14 +186,14 @@ export default function expenses() {
 
     setSuccessMessage("Expense added successfully!");
 
-  // Delay hiding the form
+    // Delay hiding the form
     setTimeout(() => {
       setSuccessMessage(""); // Clear success message
       setShowForm(false); // Close the form after showing the success message
     }, 3000); // Delay of 3 seconds
 
     if (!amount || !category || !expenseDate || !expenseTime) {
-      showAlert('error', 'Please fill in all fields.');
+      showAlert("error", "Please fill in all fields.");
       return;
     }
 
@@ -182,7 +203,7 @@ export default function expenses() {
       amount: parseFloat(amount),
       category_name: category,
       date: expenseDate,
-      time: formattedTime
+      time: formattedTime,
     };
 
     try {
@@ -195,35 +216,41 @@ export default function expenses() {
       });
 
       if (response.ok) {
-        const updatedResponse = await fetch("http://localhost:5001/api/expenses-with-categories");
+        const updatedResponse = await fetch(
+          "http://localhost:5001/api/expenses-with-categories"
+        );
         if (!updatedResponse.ok) {
           const errorText = await updatedResponse.text();
           console.error("Error response:", updatedResponse.status, errorText);
-          showAlert('error', 'Failed to fetch updated expenses.');
+          showAlert("error", "Failed to fetch updated expenses.");
           return;
         }
         const updatedExpenseData = await updatedResponse.json();
-        
-        const formattedExpenses = updatedExpenseData.expenses.map((expense: Expense) => ({
-          ...expense,
-          date: expense.date ? new Date(expense.date).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
-          time: formatTime(expense.time)
-        }));
-        
+
+        const formattedExpenses = updatedExpenseData.expenses.map(
+          (expense: Expense) => ({
+            ...expense,
+            date: expense.date
+              ? new Date(expense.date).toISOString().split("T")[0]
+              : new Date().toISOString().split("T")[0],
+            time: formatTime(expense.time),
+          })
+        );
+
         setExpenses(formattedExpenses);
         setAmount("");
         setCategory("");
         setExpenseDate("");
         setExpenseTime("");
         setShowForm(false);
-        showAlert('success', 'Expense added successfully!');
+        showAlert("success", "Expense added successfully!");
       } else {
         const errorData = await response.json();
-        showAlert('error', errorData.error || 'Failed to add expense');
+        showAlert("error", errorData.error || "Failed to add expense");
       }
     } catch (error) {
       console.error("Error submitting expense:", error);
-      showAlert('error', 'An unexpected error occurred. Please try again.');
+      showAlert("error", "An unexpected error occurred. Please try again.");
     }
   };
 
@@ -237,7 +264,8 @@ export default function expenses() {
               <div className="sm:flex-auto">
                 <h1 className="text-base font-semibold text-white">Expenses</h1>
                 <p className="mt-2 text-sm text-gray-300">
-                  A list of all the expenses including the amount, category, date, and time.
+                  A list of all the expenses including the amount, category,
+                  date, and time.
                 </p>
               </div>
               <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
@@ -261,7 +289,9 @@ export default function expenses() {
                 )}
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
-                    <label htmlFor="amount" className="text-white">Amount</label>
+                    <label htmlFor="amount" className="text-white">
+                      Amount
+                    </label>
                     <input
                       id="amount"
                       type="number"
@@ -272,14 +302,16 @@ export default function expenses() {
                     />
                   </div>
 
-                  <CategorySelector 
+                  <CategorySelector
                     categories={categories}
                     onCategoryChange={setCategory}
                     selectedCategory={category}
                   />
 
                   <div>
-                    <label htmlFor="expenseDate" className="text-white">Date</label>
+                    <label htmlFor="expenseDate" className="text-white">
+                      Date
+                    </label>
                     <input
                       id="expenseDate"
                       type="date"
@@ -290,25 +322,29 @@ export default function expenses() {
                     />
                   </div>
                   <div>
-      <label htmlFor="expenseTime" className="text-white">Time</label>
-      <input
-        id="expenseTime"
-        type="time"
-        value={expenseTime}
-        onChange={(e) => {
-          const newTime = e.target.value;
-          // Add null check when setting time
-          if (newTime) {
-            setExpenseTime(newTime.length === 5 ? `${newTime}:00` : newTime);
-          } else {
-            setExpenseTime("00:00:00");
-          }
-        }}
-        className="mt-1 p-2 rounded-md w-full bg-gray-700 text-white border-gray-600 focus:border-indigo-500 focus:ring-indigo-500"
-        required
-        step="1"
-      />
-    </div>
+                    <label htmlFor="expenseTime" className="text-white">
+                      Time
+                    </label>
+                    <input
+                      id="expenseTime"
+                      type="time"
+                      value={expenseTime}
+                      onChange={(e) => {
+                        const newTime = e.target.value;
+                        // Add null check when setting time
+                        if (newTime) {
+                          setExpenseTime(
+                            newTime.length === 5 ? `${newTime}:00` : newTime
+                          );
+                        } else {
+                          setExpenseTime("00:00:00");
+                        }
+                      }}
+                      className="mt-1 p-2 rounded-md w-full bg-gray-700 text-white border-gray-600 focus:border-indigo-500 focus:ring-indigo-500"
+                      required
+                      step="1"
+                    />
+                  </div>
                   <div className="flex justify-end space-x-4">
                     <button
                       type="button"
@@ -365,7 +401,7 @@ export default function expenses() {
                             {expense.time}
                           </td>
                           <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-300">
-                            {expense.amount}
+                            ₹{expense.amount}
                           </td>
                           <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-300">
                             {expense.category_name}
@@ -380,6 +416,7 @@ export default function expenses() {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }
