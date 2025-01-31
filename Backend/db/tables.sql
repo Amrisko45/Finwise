@@ -40,19 +40,6 @@ CREATE TABLE IF NOT EXISTS Expenses (
     FOREIGN KEY (category_id) REFERENCES Expense_Category(category_id) ON DELETE SET NULL
 );
 
-CREATE TABLE IF NOT EXISTS Recurring_Expenses (
-    recurring_id INT AUTO_INCREMENT PRIMARY KEY,
-    amount DECIMAL(10, 2) NOT NULL,
-    start_date DATE NOT NULL,
-    end_date DATE,
-    frequency ENUM('Daily', 'Weekly', 'Monthly', 'Yearly') NOT NULL DEFAULT 'Monthly',
-    user_id INT,
-    category_id INT,
-    FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
-    FOREIGN KEY (category_id) REFERENCES Expense_Category(category_id) ON DELETE SET NULL
-);
-
-
 CREATE TABLE IF NOT EXISTS Budget (
     budget_id INT AUTO_INCREMENT PRIMARY KEY,
     monthly_budget DECIMAL(10, 2) NOT NULL,
@@ -66,5 +53,8 @@ CREATE TABLE IF NOT EXISTS Financial_Goal (
     goal_amount DECIMAL(10, 2) NOT NULL,
     goal_deadline DATE NOT NULL,
     budget_id INT,
+    user_id INT,
+    description VARCHAR(255) NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
     FOREIGN KEY (budget_id) REFERENCES Budget(budget_id) ON DELETE CASCADE
 );
