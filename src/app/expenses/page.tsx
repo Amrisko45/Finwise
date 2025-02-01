@@ -1,4 +1,6 @@
+"use client";
 import Footer from "@/components/Footer";
+import NavBar from "@/components/NavBar";
 import React, { useState, useEffect } from "react";
 
 type Expense = {
@@ -256,6 +258,7 @@ export default function expenses() {
 
   return (
     <div className="bg-gray-900">
+      <NavBar />
       <div className="mx-auto max-w-7xl">
         <div className="bg-gray-900 py-10">
           <div className="px-4 sm:px-6 lg:px-8">

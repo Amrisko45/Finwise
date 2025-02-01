@@ -12,12 +12,17 @@ router.post("/add-income", async (req, res) => {
   console.log(req.body);
 
   //Input validation
-  if (!amount | !frequency || !source_name) {
+  if (!amount || !frequency || !source_name) {
     return res
       .status(400)
       .json({ error: "Amount, Frequency and Source_name are required" });
   }
 
+  if (isNaN(amount) || amount <= 0) {
+    return res
+      .status(400)
+      .json({ error: "Amount must be a valid positive number" });
+  }
   if (!user_id) {
     return res.status(400).json({ error: "User ID is required" });
   }
@@ -47,9 +52,10 @@ router.post("/add-income", async (req, res) => {
         sourceId = insertIncomeResult.insertId;
       }
       //Insert the income with user_id from the environment variable
+      const currentDate = new Date().toISOString().split("T")[0];
       const [insertIncomeResult] = await connection.query(
-        "INSERT INTO Income (amount, date, user_id, source_id, frequency) VALUES (?, CURDATE(), ?, ?, ?)",
-        [amount, user_id, sourceId, frequency]
+        "INSERT INTO Income (amount, date, user_id, source_id, frequency) VALUES (?, ?, ?, ?, ?)",
+        [amount, currentDate, user_id, sourceId, frequency]
       );
 
       //commit transaction
@@ -61,7 +67,7 @@ router.post("/add-income", async (req, res) => {
         income: {
           income_id: insertIncomeResult.insertId,
           amount,
-          date: new Date().toISOString().split("T")[0], // Current date in YYYY-MM-DD format
+          date: currentDate, // Current date in YYYY-MM-DD format
           source_name,
           frequency,
         },
@@ -80,8 +86,6 @@ router.post("/add-income", async (req, res) => {
   }
 });
 
-export default router;
-
 router.get("/income-with-sources", async (req, res) => {
   const user_id = process.env.USER_ID;
 
@@ -93,10 +97,10 @@ router.get("/income-with-sources", async (req, res) => {
     const connection = await db.getConnection();
 
     const [incomes] = await connection.query(
-      `SELECT i.income_id, i.amount, i.date, i.user_id, s.source_id, i.frequency
-             FROM Income i
-             JOIN Income_Source s ON i.source_id = s.source_id
-             WHERE i.user_id = ?`,
+      `SELECT i.income_id, i.amount, i.date, i.user_id, s.source_id, s.source_name, i.frequency
+FROM Income i
+JOIN Income_Source s ON i.source_id = s.source_id
+WHERE i.user_id = ?`,
       [user_id]
     );
 
@@ -113,3 +117,5 @@ router.get("/income-with-sources", async (req, res) => {
     res.status(500).json({ error: "Failed to fetch data" });
   }
 });
+
+export default router;

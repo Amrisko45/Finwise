@@ -1,28 +1,36 @@
-'use client'
-import { useRouter } from 'next/navigation'
-import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
-import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import Link from 'next/link'
+"use client";
+import { useRouter } from "next/navigation";
+import {
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
+} from "@headlessui/react";
+import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import Link from "next/link";
 
 const navigation = [
-  { name: 'Home', href: '/home', current: true },
-  { name: 'Budget', href: '/budget', current: false },
-  { name: 'Income', href: '/income', current: false },
-  { name: 'Expenses', href: '/expenses', current: false },
-  { name: 'Financial Goals', href: '/financial-goals', current: false },
-  { name: 'About', href: '/about', current: false },
-]
+  { name: "Home", href: "/", current: true },
+  { name: "Budget", href: "/budget", current: false },
+  { name: "Income", href: "/income", current: false },
+  { name: "Expenses", href: "/expenses", current: false },
+  { name: "Financial Goals", href: "/financial-goals", current: false },
+  { name: "About", href: "/about", current: false },
+];
 
 function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(" ");
 }
 
 export default function NavBar() {
-    // console.log('Rendering Navbar');
+  // console.log('Rendering Navbar');
 
-    const router = useRouter();
-    // console.log('Router:', router);
-    return (
+  const router = useRouter();
+  // console.log('Router:', router);
+  return (
     <Disclosure as="nav" className="bg-gray-800">
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
         <div className="relative flex h-16 items-center justify-between">
@@ -31,8 +39,14 @@ export default function NavBar() {
             <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
               <span className="absolute -inset-0.5" />
               <span className="sr-only">Open main menu</span>
-              <Bars3Icon aria-hidden="true" className="block size-6 group-data-[open]:hidden" />
-              <XMarkIcon aria-hidden="true" className="hidden size-6 group-data-[open]:block" />
+              <Bars3Icon
+                aria-hidden="true"
+                className="block size-6 group-data-[open]:hidden"
+              />
+              <XMarkIcon
+                aria-hidden="true"
+                className="hidden size-6 group-data-[open]:block"
+              />
             </DisclosureButton>
           </div>
           <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
@@ -47,15 +61,17 @@ export default function NavBar() {
               <div className="flex space-x-4">
                 {navigation.map((item) => (
                   <Link key={item.name} href={item.href} legacyBehavior>
-                  <a
-                    aria-current={item.current ? 'page' : undefined}
-                    className={classNames(
-                      item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                      'rounded-md px-3 py-2 text-sm font-medium',
-                    )}
-                  >
-                    {item.name}
-                  </a>
+                    <a
+                      aria-current={item.current ? "page" : undefined}
+                      className={classNames(
+                        item.current
+                          ? "bg-gray-900 text-white"
+                          : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                        "rounded-md px-3 py-2 text-sm font-medium"
+                      )}
+                    >
+                      {item.name}
+                    </a>
                   </Link>
                 ))}
               </div>
@@ -125,10 +141,12 @@ export default function NavBar() {
               key={item.name}
               as="a"
               href={item.href}
-              aria-current={item.current ? 'page' : undefined}
+              aria-current={item.current ? "page" : undefined}
               className={classNames(
-                item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                'block rounded-md px-3 py-2 text-base font-medium',
+                item.current
+                  ? "bg-gray-900 text-white"
+                  : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                "block rounded-md px-3 py-2 text-base font-medium"
               )}
             >
               {item.name}
@@ -137,5 +155,5 @@ export default function NavBar() {
         </div>
       </DisclosurePanel>
     </Disclosure>
-  )
+  );
 }

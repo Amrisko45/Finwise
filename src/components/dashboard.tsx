@@ -83,7 +83,7 @@ const Dashboard: React.FC = () => {
       <Box
         sx={{
           padding: "40px",
-          backgroundColor: blue[900],
+          backgroundColor: indigo[800],
           minHeight: "100vh",
           color: grey[100],
         }}

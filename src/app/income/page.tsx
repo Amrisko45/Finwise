@@ -1,6 +1,7 @@
-// "use client";
+"use client";
 import Footer from "@/components/Footer";
-import { use, useEffect, useState } from "react";
+import NavBar from "@/components/NavBar";
+import { useEffect, useState } from "react";
 
 type Income = {
   income_id: number;
@@ -15,7 +16,7 @@ type Source = {
   source_name: string;
 };
 
-export default function income() {
+export default function Income() {
   const [incomes, setIncomes] = useState<Income[]>([]);
   const [amount, setAmount] = useState<string>("");
   const [source, setSource] = useState<string>("");
@@ -23,7 +24,7 @@ export default function income() {
   const [incomeDate, setIncomeDate] = useState<string>("");
   const [frequency, setFrequency] = useState<string>("");
   const [showForm, setShowForm] = useState<boolean>(false);
-  const [successMessage, setSuccessMessage] = useState("");
+  const [currency, setCurrency] = useState("₹");
 
   const [alert, setAlert] = useState<{
     type: "success" | "error";
@@ -51,42 +52,37 @@ export default function income() {
   };
 
   useEffect(() => {
-    async function fetchIncomesAndSources() {
+    const fetchIncomesAndSources = async () => {
       try {
         const response = await fetch(
           "http://localhost:5001/api/income-with-sources"
         );
-        const data: { incomes: Income[]; sources: Source[] } =
-          await response.json();
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        console.log("Fetched data:", data); // Log the response
 
-        const formattedIncomes = data.incomes.map((income) => ({
+        // Format the date to YYYY-MM-DD
+        const formattedIncomes = data.incomes.map((income: Income) => ({
           ...income,
-          date: income.date
-            ? new Date(income.date).toISOString().split("T")[0]
-            : new Date().toISOString().split("T")[0],
+          date: income.date.split("T")[0], // Extract YYYY-MM-DD from ISO format
         }));
+
         setIncomes(formattedIncomes);
         setSources(data.sources);
-        console.log(data.sources);
       } catch (error) {
         console.error("Error fetching data: ", error);
+        showAlert("error", "Failed to fetch data. Please try again later.");
       }
-    }
+    };
     fetchIncomesAndSources();
   }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    setSuccessMessage("Expense added successfully!");
-
-    //Delay hiding the form
-    setTimeout(() => {
-      setSuccessMessage("");
-      setShowForm(false);
-    }, 3000);
-
-    if (!amount || !source || !incomeDate || !frequency) {
+    if (!amount || !source.trim() || !incomeDate || !frequency.trim()) {
       showAlert("error", "Please fill in all fields");
       return;
     }
@@ -122,9 +118,6 @@ export default function income() {
         const formattedIncomes = updatedIncomeData.incomes.map(
           (income: Income) => ({
             ...income,
-            // date: income.date,
-            // ? new Date(income.date).toISOString().split("T")[0]
-            // : new Date().toISOString().split("T")[0],
             date: income.date || new Date().toISOString().split("T")[0],
           })
         );
@@ -142,12 +135,13 @@ export default function income() {
       }
     } catch (error) {
       console.error("Error submitting income:", error);
-      showAlert("error", "An unexpected error occured. Please try again");
+      showAlert("error", "An unexpected error occurred. Please try again");
     }
   };
 
   return (
     <div className="bg-gray-900">
+      <NavBar />
       <div className="mx-auto max-w-7xl">
         <div className="bg-gray-900 py-10">
           <div className="px-4 sm:px-6 lg:px-8">
@@ -156,7 +150,7 @@ export default function income() {
                 <h1 className="text-base font-semibold text-white">Users</h1>
                 <p className="mt-2 text-sm text-gray-300">
                   A list of all the users in your account including their
-                  income, source, date and frequency.
+                  income, source, date, and frequency.
                 </p>
               </div>
               <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
@@ -172,9 +166,13 @@ export default function income() {
             {/* INCOME FORM */}
             {showForm && (
               <div className="mt-4">
-                {successMessage && (
-                  <div className="mb-4 p-3 rounded-md bg-green-600 text-white">
-                    {successMessage}
+                {alert.show && (
+                  <div
+                    className={`p-4 mb-4 rounded-md ${
+                      alert.type === "success" ? "bg-green-600" : "bg-red-600"
+                    } text-white`}
+                  >
+                    {alert.message}
                   </div>
                 )}
                 <form onSubmit={handleSubmit} className="space-y-4">
@@ -296,7 +294,8 @@ export default function income() {
                       {incomes.map((income) => (
                         <tr key={income.income_id}>
                           <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-white sm:pl-0">
-                            ₹{income.amount}
+                            {currency}
+                            {income.amount}
                           </td>
                           <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-300">
                             {income.source_name}

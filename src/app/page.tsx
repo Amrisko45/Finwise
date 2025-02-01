@@ -2,10 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import Footer from "../../components/Footer";
-import Chatbot from "../chatbot/ChatBot";
 import NavBar from "@/components/NavBar";
 import Dashboard from "@/components/dashboard";
+import Footer from "@/components/Footer";
 
 const Home = () => {
   const router = useRouter();
@@ -34,7 +33,6 @@ const Home = () => {
         <NavBar />
         <Dashboard />
       </div>
-      <Chatbot />
       <div className="mt-24">
         <Footer />
       </div>
