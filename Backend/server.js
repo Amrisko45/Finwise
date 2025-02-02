@@ -12,7 +12,7 @@ import addExpenseRouter from "./routes/expenses.js";
 import addIncomeRouter from "./routes/income.js";
 import addBudgetRouter from "./routes/budget.js";
 import addFinancialGoalsRouter from "./routes/financialGoals.js";
-
+import addDashboardRouter from "./routes/dashboard.js";
 const app = express();
 const port = process.env.PORT || 5001; // Default port to 4000 or use environment variable
 const __filename = fileURLToPath(import.meta.url);
@@ -81,6 +81,7 @@ app.use("/api", addExpenseRouter);
 app.use("/api", addIncomeRouter);
 app.use("/api", addBudgetRouter);
 app.use("/api", addFinancialGoalsRouter);
+app.use("/api", addDashboardRouter);
 
 // Start server and connect to the database
 app.listen(port, async () => {

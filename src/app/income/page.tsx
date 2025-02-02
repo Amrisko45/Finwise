@@ -147,7 +147,7 @@ export default function Income() {
           <div className="px-4 sm:px-6 lg:px-8">
             <div className="sm:flex sm:items-center">
               <div className="sm:flex-auto">
-                <h1 className="text-base font-semibold text-white">Users</h1>
+                <h1 className="text-base font-semibold text-white">Income</h1>
                 <p className="mt-2 text-sm text-gray-300">
                   A list of all the users in your account including their
                   income, source, date, and frequency.
