@@ -28,7 +28,7 @@ export default function LoginPage() {
         setErrorMessage(""); // Clear previous errors
         alert("Login successful! Redirecting to home page...");
         localStorage.setItem("authToken", "true");
-        router.push("/home"); // Redirect to home page
+        router.push("/"); // Redirect to home page
       } else if (response.status === 401) {
         // Unauthorized: Invalid credentials
         setErrorMessage("Invalid username or password!"); // Set error message

@@ -1,5 +1,5 @@
-'use client'
-import { useState,useEffect } from "react";
+"use client";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -23,17 +23,24 @@ export default function SignUp() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ first_name, last_name, email, password, gender }),
+        body: JSON.stringify({
+          first_name,
+          last_name,
+          email,
+          password,
+          gender,
+        }),
       });
-  
+
       const data = await response.json();
       console.log("Signup Response:", data);
-  
+
       if (response.ok) {
         setErrorMessage(""); // Clear previous errors
         alert("Signup successful! Redirecting to home page...");
-        router.push("/home"); // Redirect to home page
-      } else if (response.status === 409) { // Conflict: User already registered
+        router.push("/"); // Redirect to home page
+      } else if (response.status === 409) {
+        // Conflict: User already registered
         setErrorMessage("User already registered!"); // Set error message
       } else {
         setErrorMessage(data.message || "An error occurred during signup."); // Handle other errors
@@ -42,11 +49,11 @@ export default function SignUp() {
       setErrorMessage("An error occurred during signup.");
       console.log("Signup error:", error);
     }
-  };  
+  };
 
-    return (
-      <>
-        {/*
+  return (
+    <>
+      {/*
           This example requires updating your template:
   
           ```
@@ -54,128 +61,153 @@ export default function SignUp() {
           <body class="h-full">
           ```
         */}
-        <div className="flex min-h-full flex-1 bg-white">
-          <div className="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
-            <div className="mx-auto w-full max-w-sm lg:w-96">
-              <div>
-                <img
-                  alt="Your Company"
-                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQv9NlOA-Kk_SKMftv65ciOv-JtBTsUaIrChg&s"
-                  className="h-10 w-auto"
-                />
-                <h2 className="mt-8 text-2xl/9 font-bold tracking-tight text-gray-900">Sign in to your account</h2>
-                <p className="mt-2 text-sm/6 text-gray-500">
-                  Already Registered?
-                  {/* <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
+      <div className="flex min-h-full flex-1 bg-white">
+        <div className="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
+          <div className="mx-auto w-full max-w-sm lg:w-96">
+            <div>
+              <img
+                alt="Your Company"
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQv9NlOA-Kk_SKMftv65ciOv-JtBTsUaIrChg&s"
+                className="h-10 w-auto"
+              />
+              <h2 className="mt-8 text-2xl/9 font-bold tracking-tight text-gray-900">
+                Sign in to your account
+              </h2>
+              <p className="mt-2 text-sm/6 text-gray-500">
+                Already Registered?
+                {/* <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
                     Start a 14 day free trial
                   </a> */}
-                  <Link href="/login" className="font-semibold text-indigo-600 hover:text-indigo-500">Login</Link>
-                </p>
-              </div>
-  
-              <div className="mt-10">
-                <div>
+                <Link
+                  href="/login"
+                  className="font-semibold text-indigo-600 hover:text-indigo-500"
+                >
+                  Login
+                </Link>
+              </p>
+            </div>
+
+            <div className="mt-10">
+              <div>
                 {errorMessage && (
-                  <div className="text-red-500 mb-4">
-                    {errorMessage}
-                  </div>
-                  )}
-                  <form action="#" method="POST" className="space-y-6" onSubmit={handleSignupSubmit}>
+                  <div className="text-red-500 mb-4">{errorMessage}</div>
+                )}
+                <form
+                  action="#"
+                  method="POST"
+                  className="space-y-6"
+                  onSubmit={handleSignupSubmit}
+                >
                   <div>
-                      <label htmlFor="first_name" className="block text-sm/6 font-medium text-gray-900">
-                        First Name
-                      </label>
-                      <div className="mt-2">
-                        <input
-                          type="text"
-                          id="first_name"
-                          name="first_name"
-                          value={first_name}
-                          onChange={(e) => setFirstName(e.target.value)} 
-                          placeholder="First Name"
-                          required
-                          className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                        />
-                      </div>
+                    <label
+                      htmlFor="first_name"
+                      className="block text-sm/6 font-medium text-gray-900"
+                    >
+                      First Name
+                    </label>
+                    <div className="mt-2">
+                      <input
+                        type="text"
+                        id="first_name"
+                        name="first_name"
+                        value={first_name}
+                        onChange={(e) => setFirstName(e.target.value)}
+                        placeholder="First Name"
+                        required
+                        className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                      />
                     </div>
-                    <div>
-                      <label htmlFor="last_name" className="block text-sm/6 font-medium text-gray-900">
-                        Last Name
-                      </label>
-                      <div className="mt-2">
-                        <input
-                          type="text"
-                          id="last_name"
-                          name="last_name"
-                          value={last_name}
-                          onChange={(e) => setLastName(e.target.value)}
-                          placeholder="Last Name"
-                          required
-                          className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                        />
-                      </div>
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="last_name"
+                      className="block text-sm/6 font-medium text-gray-900"
+                    >
+                      Last Name
+                    </label>
+                    <div className="mt-2">
+                      <input
+                        type="text"
+                        id="last_name"
+                        name="last_name"
+                        value={last_name}
+                        onChange={(e) => setLastName(e.target.value)}
+                        placeholder="Last Name"
+                        required
+                        className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                      />
                     </div>
-                    <div>
-                      <label htmlFor="email" className="block text-sm/6 font-medium text-gray-900">
-                        Email address
-                      </label>
-                      <div className="mt-2">
-                        <input
-                          type="email"
-                          id="email"
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)} 
-                          placeholder="Email"
-                          required
-                          name="email"
-                          autoComplete="email"
-                          className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                        />
-                      </div>
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="email"
+                      className="block text-sm/6 font-medium text-gray-900"
+                    >
+                      Email address
+                    </label>
+                    <div className="mt-2">
+                      <input
+                        type="email"
+                        id="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="Email"
+                        required
+                        name="email"
+                        autoComplete="email"
+                        className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                      />
                     </div>
-                    <div>
-                      <label htmlFor="gender" className="block text-sm/6 font-medium text-gray-900">
-                        Gender
-                      </label>
-                      <div className="mt-2">
-                        <select
-                          value={gender}
-                          id="gender"
-                          name="gender"
-                          onChange={(e) => setGender(e.target.value)}
-                          required
-                          className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                        >
-                      <option value="" disabled>
-                        Select your Gender
-                      </option>
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="gender"
+                      className="block text-sm/6 font-medium text-gray-900"
+                    >
+                      Gender
+                    </label>
+                    <div className="mt-2">
+                      <select
+                        value={gender}
+                        id="gender"
+                        name="gender"
+                        onChange={(e) => setGender(e.target.value)}
+                        required
+                        className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                      >
+                        <option value="" disabled>
+                          Select your Gender
+                        </option>
                         <option value="male">Male</option>
                         <option value="female">Female</option>
                         <option value="other">Other</option>
                       </select>
-                      </div>
                     </div>
-                    <div>
-                      <label htmlFor="password" className="block text-sm/6 font-medium text-gray-900">
-                        Password
-                      </label>
-                      <div className="mt-2">
-                        <input
-                          type="password"
-                          id="password"
-                          value={password}
-                          onChange={(e) => setPassword(e.target.value)} 
-                          placeholder="Password"
-                          required
-                          name="password"
-                          autoComplete="current-password"
-                          className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                        />
-                      </div>
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="password"
+                      className="block text-sm/6 font-medium text-gray-900"
+                    >
+                      Password
+                    </label>
+                    <div className="mt-2">
+                      <input
+                        type="password"
+                        id="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="Password"
+                        required
+                        name="password"
+                        autoComplete="current-password"
+                        className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                      />
                     </div>
-  
-                    <div className="flex items-center justify-between">
-                      {/* <div className="flex gap-3">
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    {/* <div className="flex gap-3">
                         <div className="flex h-6 shrink-0 items-center">
                           <div className="group grid size-4 grid-cols-1">
                             <input
@@ -210,27 +242,27 @@ export default function SignUp() {
                           Remember me
                         </label>
                       </div> */}
-  
-                      <div className="text-sm/6">
-                        {/* <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
+
+                    <div className="text-sm/6">
+                      {/* <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
                           Forgot password?
                         </a> */}
-                      </div>
                     </div>
-  
-                    <div>
-                      <button
-                        type="submit"
-                        className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                      >
-                        Sign in
-                      </button>
-                    </div>
-                  </form>
-                </div>
-  
-                <div className="mt-10">
-                  {/* <div className="relative">
+                  </div>
+
+                  <div>
+                    <button
+                      type="submit"
+                      className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                    >
+                      Sign in
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+              <div className="mt-10">
+                {/* <div className="relative">
                     <div aria-hidden="true" className="absolute inset-0 flex items-center">
                       <div className="w-full border-t border-gray-200" />
                     </div>
@@ -238,9 +270,9 @@ export default function SignUp() {
                       <span className="bg-white px-6 text-gray-900">Or continue with</span>
                     </div>
                   </div> */}
-  
-                  <div className="mt-6 grid grid-cols-2 gap-4">
-                    {/* <a
+
+                <div className="mt-6 grid grid-cols-2 gap-4">
+                  {/* <a
                       href="#"
                       className="flex w-full items-center justify-center gap-3 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:ring-transparent"
                     >
@@ -264,8 +296,8 @@ export default function SignUp() {
                       </svg>
                       <span className="text-sm/6 font-semibold">Google</span>
                     </a> */}
-  
-                    {/* <a
+
+                  {/* <a
                       href="#"
                       className="flex w-full items-center justify-center gap-3 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:ring-transparent"
                     >
@@ -278,20 +310,19 @@ export default function SignUp() {
                       </svg>
                       <span className="text-sm/6 font-semibold">GitHub</span>
                     </a> */}
-                  </div>
                 </div>
               </div>
             </div>
           </div>
-          <div className="relative hidden w-0 flex-1 lg:block">
-            <img
-              alt=""
-              src="https://images.pexels.com/photos/669610/pexels-photo-669610.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-              className="absolute inset-0 size-full object-cover"
-            />
-          </div>
         </div>
-      </>
-    )
-  }
-  
+        <div className="relative hidden w-0 flex-1 lg:block">
+          <img
+            alt=""
+            src="https://images.pexels.com/photos/669610/pexels-photo-669610.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+            className="absolute inset-0 size-full object-cover"
+          />
+        </div>
+      </div>
+    </>
+  );
+}

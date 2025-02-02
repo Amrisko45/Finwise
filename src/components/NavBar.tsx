@@ -11,6 +11,7 @@ import {
 } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const navigation = [
   { name: "Home", href: "/", current: true },
@@ -26,6 +27,7 @@ function classNames(...classes: string[]) {
 }
 
 export default function NavBar() {
+  const pathname = usePathname();
   // console.log('Rendering Navbar');
 
   const router = useRouter();
@@ -53,7 +55,7 @@ export default function NavBar() {
             <div className="flex shrink-0 items-center">
               <img
                 alt="Your Company"
-                src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=500"
+                src="/logo-color.png"
                 className="h-8 w-auto"
               />
             </div>
@@ -62,13 +64,12 @@ export default function NavBar() {
                 {navigation.map((item) => (
                   <Link key={item.name} href={item.href} legacyBehavior>
                     <a
-                      aria-current={item.current ? "page" : undefined}
-                      className={classNames(
-                        item.current
+                      href={item.href}
+                      className={`rounded-md px-3 py-2 text-sm font-medium ${
+                        pathname === item.href
                           ? "bg-gray-900 text-white"
-                          : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                        "rounded-md px-3 py-2 text-sm font-medium"
-                      )}
+                          : "text-gray-300 hover:bg-gray-700 hover:text-white"
+                      }`}
                     >
                       {item.name}
                     </a>
@@ -78,14 +79,14 @@ export default function NavBar() {
             </div>
           </div>
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-            <button
+            {/* <button
               type="button"
               className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
             >
               <span className="absolute -inset-1.5" />
               <span className="sr-only">View notifications</span>
               <BellIcon aria-hidden="true" className="size-6" />
-            </button>
+            </button> */}
 
             {/* Profile dropdown */}
             <Menu as="div" className="relative ml-3">

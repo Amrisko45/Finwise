@@ -159,7 +159,7 @@ export default function expenses() {
               {cat.category_name}
             </option>
           ))}
-          <option value="other">Other...</option>
+          <option value="other">Add Custom Category</option>
         </select>
 
         {selectedCategory === "other" && (
