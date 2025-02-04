@@ -180,7 +180,7 @@ export default function About() {
         <div className="mt-32 sm:mt-40 xl:mx-auto xl:max-w-7xl xl:px-8">
           <img
             alt="FinanceAI Hub Dashboard"
-            src="/Dashboard.jpg"
+            src="/image.png"
             className="aspect-[9/4] w-full object-cover xl:rounded-3xl"
           />
         </div>

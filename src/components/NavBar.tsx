@@ -19,6 +19,7 @@ const navigation = [
   { name: "Income", href: "/income", current: false },
   { name: "Expenses", href: "/expenses", current: false },
   { name: "Financial Goals", href: "/financial-goals", current: false },
+  { name: "FinSync", href: "/chatbot", current: false },
   { name: "About", href: "/about", current: false },
 ];
 

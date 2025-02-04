@@ -58,3 +58,6 @@ CREATE TABLE IF NOT EXISTS Financial_Goal (
     FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
     FOREIGN KEY (budget_id) REFERENCES Budget(budget_id) ON DELETE CASCADE
 );
+
+ALTER TABLE Users ADD COLUMN is_admin BOOLEAN DEFAULT FALSE;
+UPDATE Users SET is_admin = TRUE WHERE email = 'sneha@gmail.com';
