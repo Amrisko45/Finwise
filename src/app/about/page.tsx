@@ -132,8 +132,8 @@ export default function About() {
             <div className="grid max-w-xl grid-cols-1 gap-8 text-base/7 text-gray-300 lg:max-w-none lg:grid-cols-2">
               <div>
                 <p>
-                  FinanceAI Hub emerged from the innovative minds of three RVCE
-                  AIML students who recognized the need for intelligent
+                  ARTH-GYAN emerged from the innovative minds of Five RVCE
+                  students who recognized the need for intelligent
                   financial management solutions. Our platform combines
                   cutting-edge AI technology with intuitive design to transform
                   how individuals track and manage their finances.
@@ -147,7 +147,7 @@ export default function About() {
               </div>
               <div>
                 <p>
-                  We've built FinanceAI Hub with security at its core, ensuring
+                  We've built ARTH-GYAN with security at its core, ensuring
                   your financial data is protected with enterprise-grade
                   encryption. Our AI-powered chatbot assistant is available 24/7
                   to answer questions and provide guidance on your financial
@@ -194,7 +194,7 @@ export default function About() {
               Our values
             </h2>
             <p className="mt-6 text-lg/8 text-gray-300">
-              At FinanceAI Hub, we're driven by our commitment to revolutionize
+              At ARTH-GYAN, we're driven by our commitment to revolutionize
               personal finance management through innovative AI solutions and
               unwavering security standards.
             </p>
@@ -222,7 +222,7 @@ export default function About() {
               Our team
             </h2>
             <p className="mt-6 text-lg/8 text-gray-300">
-              Meet the innovative minds behind FinanceAI Hub - RVCE AIML
+              Meet the innovative minds behind Arth-Gyan - RVCE 
               students passionate about combining artificial intelligence with
               financial technology.
             </p>

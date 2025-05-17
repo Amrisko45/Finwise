@@ -103,7 +103,7 @@ export default function Footer() {
           ))}
         </div>
         <p className="mt-10 text-center text-sm/6 text-gray-400">
-          &copy; 2025 FinanceAI Hub, Inc. All rights reserved.
+          &copy; 2025 Arth-Gyan, Inc. All rights reserved.
         </p>
       </div>
     </footer>
