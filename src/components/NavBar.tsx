@@ -19,7 +19,7 @@ const navigation = [
   { name: "Income", href: "/income", current: false },
   { name: "Expenses", href: "/expenses", current: false },
   { name: "Financial Goals", href: "/financial-goals", current: false },
-  { name: "FinSync", href: "/chatbot", current: false },
+  { name: "Finwise", href: "/chatbot", current: false },
   { name: "About", href: "/about", current: false },
 ];
 
@@ -56,7 +56,7 @@ export default function NavBar() {
             <div className="flex shrink-0 items-center">
               <img
                 alt="Your Company"
-                src="/logo-color.png"
+                src="/Logo.jpg"
                 className="h-8 w-auto"
               />
             </div>

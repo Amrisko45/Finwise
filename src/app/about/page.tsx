@@ -12,7 +12,7 @@ import {
 } from "@heroicons/react/20/solid";
 import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
-
+// import arthGyanLogo from "AI-Integrated-Personal-Finance-Tracker\public\WhatsApp Image 2025-05-17 at 09.14.21_cff4a27f.jpg";
 const stats = [
   { label: "Platform launched", value: "2025" },
   { label: "Active users", value: "10k+" },
@@ -61,21 +61,23 @@ const values = [
 
 const team = [
   {
-    name: "Aryan Sinha",
-    role: "Full Stack Developer",
-    imageUrl: "/Photo1.jpeg",
+    name: "Vikrant Parulekar",
     location: "RVCE, Bangalore",
   },
   {
-    name: "Kushagra Aatre",
-    role: "AI Development Lead",
-    imageUrl: "/Photo2.jpeg",
+    name: "Amritanshu Sharma",
     location: "RVCE, Bangalore",
   },
   {
-    name: "Ayush Chouhan",
-    role: "AI Development Lead",
-    imageUrl: "/Photo3.jpeg",
+    name: "Hriday Jain",
+    location: "RVCE, Bangalore",
+  },
+ {
+    name: "Gokul Raj",
+    location: "RVCE, Bangalore",
+  },
+   {
+    name: "Abhishek Baradwaj",
     location: "RVCE, Bangalore",
   },
 ];
@@ -114,7 +116,7 @@ export default function About() {
         <div className="px-6 pt-14 lg:px-8">
           <div className="mx-auto max-w-2xl pt-24 text-center sm:pt-40">
             <h1 className="text-5xl font-semibold tracking-tight text-white sm:text-7xl">
-              FinanceAI Hub
+              Arth-Gyan
             </h1>
             <p className="mt-8 text-pretty text-lg font-medium text-gray-400 sm:text-xl/8">
               Revolutionizing personal finance management with AI-powered
@@ -231,11 +233,6 @@ export default function About() {
           >
             {team.map((person) => (
               <li key={person.name}>
-                <img
-                  alt=""
-                  src={person.imageUrl}
-                  className="aspect-[14/13] w-full rounded-2xl object-cover"
-                />
                 <h3 className="mt-6 text-lg/8 font-semibold tracking-tight text-white">
                   {person.name}
                 </h3>
@@ -251,13 +248,13 @@ export default function About() {
           <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
             <div className="mx-auto flex max-w-2xl flex-col gap-16 bg-white/5 px-6 py-16 ring-1 ring-white/10 sm:rounded-3xl sm:p-8 lg:mx-0 lg:max-w-none lg:flex-row lg:items-center lg:py-20 xl:gap-x-20 xl:px-20">
               <img
-                alt="FinanceAI Hub Interface"
-                src="/logo-color.png"
+                alt="Arth-gyan Interface"
+                src="/Logo.jpg"
                 className="h-96 w-full flex-none rounded-2xl object-cover shadow-xl lg:aspect-square lg:h-auto lg:max-w-sm"
               />
               <div className="w-full flex-auto">
                 <h2 className="text-pretty text-4xl font-semibold tracking-tight text-white sm:text-5xl">
-                  Try FinanceAI Hub
+                  Try Arth Gyan
                 </h2>
                 <p className="mt-6 text-pretty text-lg/8 text-gray-300">
                   Experience the future of personal finance management with our

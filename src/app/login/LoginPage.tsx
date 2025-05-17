@@ -55,7 +55,7 @@ export default function LoginPage() {
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <img
             alt="Your Company"
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQv9NlOA-Kk_SKMftv65ciOv-JtBTsUaIrChg&s"
+            src="/Logo.jpg"
             className="mx-auto h-10 w-auto"
           />
           <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">

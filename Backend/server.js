@@ -27,7 +27,7 @@ const dbConfig = {
   user: "root", // Replace with your MySQL username
   port: process.env.MYSQL_PORT || 3306,
   password: process.env.MYSQL_PASS, // Replace with your actual password
-  database: "finance_trackerDB",
+  database: 'finance_trackerdb',
   multipleStatements: true, // Enable multiple statements
 };
 

@@ -4,8 +4,8 @@ import mysql from 'mysql2/promise';
 const pool = mysql.createPool({
   host: 'localhost',
   user: 'root',
-  password: 'CvProject@42',
-  database: 'finance_trackerDB',
+  password: '0902',
+  database: 'finance_trackerdb',
   waitForConnections: true,
   connectionLimit: 10, // Adjust based on your needs
   queueLimit: 0,       // No limit on queued connections
