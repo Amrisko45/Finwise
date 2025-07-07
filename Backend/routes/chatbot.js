@@ -223,7 +223,7 @@ const detectSuspiciousTransactions = (transactions) => {
   
   // Check for rapid sequence of transactions
   const sortedByDate = [...transactions].sort((a, b) => new Date(a.date) - new Date(b.date));
-  for (let i = 0; i < sortedByDate.length - 3; i++) {
+  for (let i = 0; i < sortedAByDate.length - 3; i++) {
     const daysDiff = (new Date(sortedByDate[i + 3].date) - new Date(sortedByDate[i].date)) / (1000 * 60 * 60 * 24);
     if (daysDiff <= 2) {
       suspiciousPatterns.push({

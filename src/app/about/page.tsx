@@ -250,7 +250,7 @@ export default function About() {
               <img
                 alt="Arth-gyan Interface"
                 src="/Logo.jpg"
-                className="h-96 w-full flex-none rounded-2xl object-cover shadow-xl lg:aspect-square lg:h-auto lg:max-w-sm"
+                className="h-96 w-full flex-none rounded-2xl object-contain bg-gray-800 p-4 shadow-xl lg:aspect-auto lg:h-auto lg:max-w-sm"
               />
               <div className="w-full flex-auto">
                 <h2 className="text-pretty text-4xl font-semibold tracking-tight text-white sm:text-5xl">
